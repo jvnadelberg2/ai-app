@@ -1,0 +1,58 @@
+<!doctype html><meta charset="utf-8">
+<title>Local AI Chatbot</title>
+<div style="max-width:800px;margin:2rem auto;font:16px system-ui;">
+  <h1>Local AI Chatbot</h1>
+  <div>
+    <label>Model:
+      <input id="model" value="phi3:mini" style="width:260px">
+    </label>
+    <button id="refresh">Refresh Models</button>
+  </div>
+  <div id="chat" style="border:1px solid #333;border-radius:8px;padding:12px;height:60vh;overflow:auto;margin:12px 0;"></div>
+  <form id="chatForm" style="display:flex;gap:8px">
+    <textarea id="prompt" rows="2" style="flex:1" placeholder="Type and press Enter..."></textarea>
+    <button type="submit">Send</button>
+  </form>
+</div>
+<script>
+const chatEl=document.getElementById("chat");
+const form=document.getElementById("chatForm");
+const promptEl=document.getElementById("prompt");
+const modelEl=document.getElementById("model");
+const refresh=document.getElementById("refresh");
+let messages=[{role:"system",content:"You are a concise, helpful assistant."}];
+
+refresh.onclick=async()=>{
+  try{
+    const res=await fetch("/api/models"); const data=await res.json();
+    const names=(data.models||[]).map(m=>m.name);
+    add(`Installed: ${names.join(", ")||"(none)"}`);
+    if(names.length && !names.includes(modelEl.value.trim())) modelEl.value=names[0];
+  }catch(e){add("Refresh failed: "+e)}
+};
+
+form.onsubmit=async(e)=>{
+  e.preventDefault();
+  const text=promptEl.value.trim(); if(!text) return;
+  messages.push({role:"user",content:text}); add("> "+text);
+  promptEl.value="";
+  const model=modelEl.value.trim()||"phi3:mini";
+  const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages,model})});
+  if(!res.ok||!res.body){ add("Error: "+res.status+" "+res.statusText); return; }
+  const reader=res.body.getReader(); const dec=new TextDecoder(); let acc="";
+  add(""); const p=chatEl.lastChild;
+  while(true){
+    const {value,done}=await reader.read(); if(done) break;
+    acc+=dec.decode(value,{stream:true});
+    p.textContent=acc; chatEl.scrollTop=chatEl.scrollHeight;
+  }
+  messages.push({role:"assistant",content:acc.trim()});
+};
+function add(t){
+  const p=document.createElement("pre");
+  p.textContent=t;
+  chatEl.appendChild(p);
+  chatEl.scrollTop=chatEl.scrollHeight;
+}
+</script>
+
