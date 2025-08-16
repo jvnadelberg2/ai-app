@@ -1,0 +1,11 @@
+{
+  "OLLAMA_BASE": "http://localhost:11434",
+  "OLLAMA_CHAT_MODEL": "phi3:mini",
+  "OLLAMA_EMB_MODEL": "nomic-embed-text",
+  "RAG_DB": "data/rag.json",
+  "PORT": 3002,
+  "TEMPERATURE": 0,
+  "TOP_P": 1,
+  "TOP_K": 1,
+  "SEED": 42
+}
