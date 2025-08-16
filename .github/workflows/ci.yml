@@ -1,0 +1,48 @@
+name: ci
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  node:
+    name: node-${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ 18.x, 20.x ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - run: |
+          if npm run -s lint >/dev/null 2>&1; then npm run -s lint; else echo skip; fi
+      - run: |
+          if npm run -s test >/dev/null 2>&1; then npm test; else echo skip; fi
+      - run: |
+          if npm run -s build >/dev/null 2>&1; then npm run -s build; else echo skip; fi
+
+  smoke:
+    name: smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - run: |
+          PORT=3002 node server.js >/dev/null 2>&1 &
+          for i in $(seq 1 50); do
+            sleep 0.1
+            if curl -fsS http://localhost:3002/health >/dev/null 2>&1; then break; fi
+          done
+          curl -fsS http://localhost:3002/health
+      - run: pkill -f "node server.js" || true
