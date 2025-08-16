@@ -18,6 +18,6 @@ coverage/
 .venv/
 __pycache__/
 *.pyc
-*.pyo
+*.pyo*
 *.pyd
 data/rag.json
