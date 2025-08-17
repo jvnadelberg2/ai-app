@@ -29,9 +29,11 @@ menu() {
 }
 menu
 cat <<'TXT'
-echo "Select an action:"
-echo "a) app     r) run"
-echo "l) logs    d) diag"
-echo "s) stop    q) quit"
+cat <<'MENU'
+Select an action:
+a) app     r) run
+l) logs    d) diag
+s) stop    q) quit
+MENU
 TXT
 
