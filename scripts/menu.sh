@@ -28,3 +28,10 @@ menu() {
   done
 }
 menu
+cat <<'TXT'
+Select an action:
+a) app     r) run
+l) logs    d) diag
+s) stop    q) quit
+TXT
+
