@@ -1,118 +1,190 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>ai-app</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:20px;line-height:1.4}
-h1{margin:0 0 12px}
-section{border:1px solid #ddd;border-radius:12px;padding:16px;margin-bottom:16px}
-input,button,textarea{font:inherit}
-input,textarea{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ccc;border-radius:8px}
-button{padding:8px 12px;border:1px solid #333;border-radius:8px;background:#fff;cursor:pointer}
-.row{display:flex;gap:8px;align-items:center}
-.row>*{flex:1}
-small{color:#666}
-pre{white-space:pre-wrap;word-wrap:break-word;background:#fafafa;border:1px solid #eee;border-radius:8px;padding:8px}
-.cits{font-size:14px;color:#333}
-.cits li{margin:4px 0}
-</style>
-</head>
-<body>
-<h1>ai-app</h1>
+  <head>
+    <meta charset="utf-8" />
+    <title>ai-app</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        margin: 20px;
+        line-height: 1.4;
+      }
+      h1 {
+        margin: 0 0 12px;
+      }
+      section {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      input,
+      button,
+      textarea {
+        font: inherit;
+      }
+      input,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      button {
+        padding: 8px 12px;
+        border: 1px solid #333;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .row > * {
+        flex: 1;
+      }
+      small {
+        color: #666;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 8px;
+      }
+      .cits {
+        font-size: 14px;
+        color: #333;
+      }
+      .cits li {
+        margin: 4px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ai-app</h1>
 
-<section>
-<h2>Chat</h2>
-<div class="row">
-<input id="chatInput" placeholder="Say hello in five words.">
-<button id="chatBtn">Send</button>
-</div>
-<pre id="chatOut"></pre>
-</section>
+    <section>
+      <h2>Chat</h2>
+      <div class="row">
+        <input id="chatInput" placeholder="Say hello in five words." />
+        <button id="chatBtn">Send</button>
+      </div>
+      <pre id="chatOut"></pre>
+    </section>
 
-<section>
-<h2>RAG</h2>
-<div class="row">
-<input id="paths" value="./docs">
-<button id="indexBtn">Index</button>
-</div>
-<small>Indexes text files under the given path</small>
-<div style="height:8px"></div>
-<input id="q" placeholder="How do I start the server?">
-<div class="row">
-<button id="askBtn">Ask</button>
-</div>
-<pre id="ansOut"></pre>
-<ul id="cits" class="cits"></ul>
-</section>
+    <section>
+      <h2>RAG</h2>
+      <div class="row">
+        <input id="paths" value="./docs" />
+        <button id="indexBtn">Index</button>
+      </div>
+      <small>Indexes text files under the given path</small>
+      <div style="height: 8px"></div>
+      <input id="q" placeholder="How do I start the server?" />
+      <div class="row">
+        <button id="askBtn">Ask</button>
+      </div>
+      <pre id="ansOut"></pre>
+      <ul id="cits" class="cits"></ul>
+    </section>
 
-<script>
-async function post(path, body){
-  const r = await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok){
-    const txt = await r.text().catch(()=>String(r.status));
-    throw new Error("HTTP "+r.status+" "+txt);
-  }
-  return r.json();
-}
+    <script>
+      async function post(path, body) {
+        const r = await fetch(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) {
+          const txt = await r.text().catch(() => String(r.status));
+          throw new Error("HTTP " + r.status + " " + txt);
+        }
+        return r.json();
+      }
 
-const chatInput=document.getElementById("chatInput");
-const chatBtn=document.getElementById("chatBtn");
-const chatOut=document.getElementById("chatOut");
-chatBtn.onclick=async()=>{
-  const text=chatInput.value.trim();
-  if(!text){ alert("Enter a prompt"); return; }
-  chatBtn.disabled=true;
-  chatOut.textContent="…";
-  try{
-    const r=await post("/ai/complete",{input:text});
-    chatOut.textContent=r.output||"";
-  }catch(e){
-    chatOut.textContent="error: "+e.message;
-  }
-  chatBtn.disabled=false;
-};
+      const chatInput = document.getElementById("chatInput");
+      const chatBtn = document.getElementById("chatBtn");
+      const chatOut = document.getElementById("chatOut");
+      chatBtn.onclick = async () => {
+        const text = chatInput.value.trim();
+        if (!text) {
+          alert("Enter a prompt");
+          return;
+        }
+        chatBtn.disabled = true;
+        chatOut.textContent = "…";
+        try {
+          const r = await post("/ai/complete", { input: text });
+          chatOut.textContent = r.output || "";
+        } catch (e) {
+          chatOut.textContent = "error: " + e.message;
+        }
+        chatBtn.disabled = false;
+      };
 
-const paths=document.getElementById("paths");
-const indexBtn=document.getElementById("indexBtn");
-indexBtn.onclick=async()=>{
-  const p=paths.value.trim();
-  if(!p){ alert("Enter a path to index"); return; }
-  indexBtn.disabled=true;
-  try{
-    await post("/rag/index",{paths:[p]});
-    alert("indexed");
-  }catch(e){
-    alert("index error: "+e.message);
-  }
-  indexBtn.disabled=false;
-};
+      const paths = document.getElementById("paths");
+      const indexBtn = document.getElementById("indexBtn");
+      indexBtn.onclick = async () => {
+        const p = paths.value.trim();
+        if (!p) {
+          alert("Enter a path to index");
+          return;
+        }
+        indexBtn.disabled = true;
+        try {
+          await post("/rag/index", { paths: [p] });
+          alert("indexed");
+        } catch (e) {
+          alert("index error: " + e.message);
+        }
+        indexBtn.disabled = false;
+      };
 
-const q=document.getElementById("q");
-const askBtn=document.getElementById("askBtn");
-const ansOut=document.getElementById("ansOut");
-const cits=document.getElementById("cits");
-askBtn.onclick=async()=>{
-  const text=q.value.trim();
-  if(!text){ alert("Enter a question"); return; }
-  askBtn.disabled=true;
-  ansOut.textContent="…";
-  cits.innerHTML="";
-  try{
-    const r=await post("/rag/answer",{q:text});
-    ansOut.textContent=r.answer||"";
-    (r.citations||[]).forEach(c=>{
-      const li=document.createElement("li");
-      li.textContent=c.path+"  idx="+c.idx+"  score="+(typeof c.score==="number"?c.score.toFixed(3):c.score);
-      cits.appendChild(li);
-    });
-  }catch(e){
-    ansOut.textContent="error: "+e.message;
-  }
-  askBtn.disabled=false;
-};
-</script>
-</body>
+      const q = document.getElementById("q");
+      const askBtn = document.getElementById("askBtn");
+      const ansOut = document.getElementById("ansOut");
+      const cits = document.getElementById("cits");
+      askBtn.onclick = async () => {
+        const text = q.value.trim();
+        if (!text) {
+          alert("Enter a question");
+          return;
+        }
+        askBtn.disabled = true;
+        ansOut.textContent = "…";
+        cits.innerHTML = "";
+        try {
+          const r = await post("/rag/answer", { q: text });
+          ansOut.textContent = r.answer || "";
+          (r.citations || []).forEach((c) => {
+            const li = document.createElement("li");
+            li.textContent =
+              c.path +
+              "  idx=" +
+              c.idx +
+              "  score=" +
+              (typeof c.score === "number" ? c.score.toFixed(3) : c.score);
+            cits.appendChild(li);
+          });
+        } catch (e) {
+          ansOut.textContent = "error: " + e.message;
+        }
+        askBtn.disabled = false;
+      };
+    </script>
+  </body>
 </html>
-
