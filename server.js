@@ -31,7 +31,7 @@ const server = http.createServer(async (req, res) => {
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       return res.end(html);
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
       res.statusCode = 404;
       return res.end("missing static/index.html");
     }
@@ -45,7 +45,7 @@ const server = http.createServer(async (req, res) => {
       const out = await complete({ system, user: input });
       return json(res, 200, { output: out });
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -58,7 +58,7 @@ return json(res, 500, { error: "An internal error occurred" });
       const vecs = await embed({ input: texts });
       return json(res, 200, { embeddings: vecs });
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -71,7 +71,7 @@ return json(res, 500, { error: "An internal error occurred" });
       const out = await indexPaths(paths);
       return json(res, 200, out);
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -85,7 +85,7 @@ return json(res, 500, { error: "An internal error occurred" });
       const out = await queryRag(q, k);
       return json(res, 200, out);
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -122,7 +122,7 @@ return json(res, 500, { error: "An internal error occurred" });
 
       return json(res, 200, { answer, citations });
     } catch (_e) {
-  console.error(_e instanceof Error ? e.stack || e.message : e);
+  console.error(_e instanceof Error ? _e.stack || _e.message : _e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
