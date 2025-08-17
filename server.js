@@ -19,13 +19,11 @@ try {
   // If your providers use CommonJS exports:
   //   module.exports = { complete, embed }
   // this require will work. If they’re ESM-only and you need import(),
-  // feel free to tell me and I’ll swap it.
-
+  // tell me and I’ll swap it.
   const providers = require("./src/providers.js");
   if (typeof providers.complete === "function") runComplete = providers.complete;
   if (typeof providers.embed === "function") runEmbed = providers.embed;
 } catch (err) {
-  // Not fatal; routes will still respond with a handled 500
   console.warn("providers.js not loaded:", err?.message || err);
 }
 
