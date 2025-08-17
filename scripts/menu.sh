@@ -18,7 +18,7 @@ menu() {
       x) stop ;;
       h) health ;;
       c) read -rp "prompt> " p; chat "$p" ;;
-      i) read -rp "paths (space-separated)> " p; index $p ;;
+      i) read -rp "paths (space-separated)> " line; read -r -a p <<< "$line"; index "${p[@]}" ;;
       a) read -rp "question> " p; ask "$p" ;;
       l) logs ;;
       d) diag ;;
