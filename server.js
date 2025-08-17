@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 "use strict";
 
 const http = require("http");
@@ -21,7 +20,7 @@ try {
   //   module.exports = { complete, embed }
   // this require will work. If they’re ESM-only and you need import(),
   // feel free to tell me and I’ll swap it.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+
   const providers = require("./src/providers.js");
   if (typeof providers.complete === "function") runComplete = providers.complete;
   if (typeof providers.embed === "function") runEmbed = providers.embed;
