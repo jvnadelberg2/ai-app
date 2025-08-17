@@ -11,6 +11,7 @@
     "md": "markdownlint **/*.md"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "eslint": "^9.33.0",
     "markdownlint-cli": "^0.45.0",
     "prettier": "^3.6.2"
