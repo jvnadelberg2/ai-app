@@ -8,3 +8,4 @@ gh api -X PATCH -H "Accept: application/vnd.github+json" \
   --input .github/required-checks.json
 gh api "/repos/$OWNER/$REPO/branches/$BRANCH/protection" --jq '.required_status_checks.contexts'
 
+ 
