@@ -1,5 +1,5 @@
 name: dependency-review
-on: pull_request
+on: [pull_request]
 permissions:
   contents: read
   pull-requests: read
@@ -9,5 +9,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: none
