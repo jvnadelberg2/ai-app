@@ -7,8 +7,10 @@
     "start": "node server.js",
     "start:3002": "PORT=3002 node server.js",
     "lint": "eslint \"**/*.{js,cjs,mjs}\"",
-    "format": "prettier -c .",
-    "md": "markdownlint **/*.md"
+    "format": "prettier -w .",
+    "md": "markdownlint **/*.md",
+    "format:check": "prettier -c .",
+    "smoke": "node -e \"console.log(\\\"ok\\\")\""
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

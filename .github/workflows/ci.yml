@@ -1,9 +1,9 @@
 name: ci
 on:
   pull_request:
-    branches: [main]
   push:
     branches: [main]
+
 jobs:
   node:
     runs-on: ubuntu-latest
@@ -13,45 +13,15 @@ jobs:
         with:
           node-version: 20.x
           cache: npm
-      - run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
-      - run: npm run format
+      - run: npm ci
+      - run: npm run format:check
       - run: npm run lint
-      - run: npm run md
+      - run: npm run smoke --if-present
+
   shellcheck:
-    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y shellcheck
-      - run: |
-          if ls scripts/*.sh >/dev/null 2>&1; then shellcheck -x scripts/*.sh; else echo "no scripts"; fi
-  smoke:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-      - run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
-      - run: |
-          mkdir -p src data
-          [ -f src/config.json ] || cat > src/config.json <<'JSON'
-          {
-            "OLLAMA_BASE": "",
-            "OLLAMA_CHAT_MODEL": "",
-            "OLLAMA_EMB_MODEL": "",
-            "RAG_DB": "data/rag.json",
-            "PORT": 3002
-          }
-          JSON
-          [ -f data/rag.json ] || echo '[]' > data/rag.json
-      - run: |
-          PORT=3002 node server.js >/dev/null 2>&1 &
-          for i in $(seq 1 50); do
-            sleep 0.1
-            if curl -fsS http://localhost:3002/health >/dev/null 2>&1; then break; fi
-          done
-          curl -fsS http://localhost:3002/health
-      - run: pkill -f "node server.js" || true
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y shellcheck
+      - run: shellcheck -x scripts/*.sh
