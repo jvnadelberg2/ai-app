@@ -1,13 +1,18 @@
 name: dependency-review
 on:
-  push:
-    branches: [main]
-
+  pull_request:
+    paths:
+      - '**/package*.json'
+      - '**/package-lock.json'
+permissions:
+  contents: read
+  pull-requests: write
 jobs:
   review:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
         with:
-          fail-on-severity: none
+          fail-on-severity: high
+
