@@ -11,6 +11,16 @@ export default [
       sourceType: "module",
       globals: globals.node,
     },
-    rules: { "no-unused-vars": ["error", { "varsIgnorePattern": "^(?:_|e)$", "argsIgnorePattern": "^_", "caughtErrors": "all", "caughtErrorsIgnorePattern": "^_" }] },
+    rules: {
+      "no-unused-vars": [
+        "error",
+        {
+          varsIgnorePattern: "^(?:_|e)$",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+    },
   },
 ];
