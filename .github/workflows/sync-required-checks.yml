@@ -1,0 +1,21 @@
+name: sync-required-checks
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to protect
+        required: true
+        default: main
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      OWNER: jvnadelberg2
+      REPO: ai-app
+      BRANCH: ${{ github.event.inputs.branch }}
+      GH_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/sync-required-checks.sh
