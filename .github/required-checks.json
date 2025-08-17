@@ -1,3 +1,0 @@
-{
-  "required_contexts": ["ci / node (pull_request)", "ci / shellcheck (pull_request)"]
-}
