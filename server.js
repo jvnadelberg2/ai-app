@@ -44,7 +44,7 @@ const server = http.createServer(async (req, res) => {
       const out = await complete({ system, user: input });
       return json(res, 200, { output: out });
     } catch (e) {
-      return json(res, 500, { error: String(e.message || e) });
+console.error(e instanceof Error ? e.stack || e.message : e); return json(res, 500, { error: "An internal error occurred" });
     }
   }
 
@@ -56,7 +56,7 @@ const server = http.createServer(async (req, res) => {
       const vecs = await embed({ input: texts });
       return json(res, 200, { embeddings: vecs });
     } catch (e) {
-      return json(res, 500, { error: String(e.message || e) });
+console.error(e instanceof Error ? e.stack || e.message : e); return json(res, 500, { error: "An internal error occurred" });
     }
   }
 
@@ -68,7 +68,7 @@ const server = http.createServer(async (req, res) => {
       const out = await indexPaths(paths);
       return json(res, 200, out);
     } catch (e) {
-      return json(res, 500, { error: String(e.message || e) });
+console.error(e instanceof Error ? e.stack || e.message : e); return json(res, 500, { error: "An internal error occurred" });
     }
   }
 
@@ -81,7 +81,7 @@ const server = http.createServer(async (req, res) => {
       const out = await queryRag(q, k);
       return json(res, 200, out);
     } catch (e) {
-      return json(res, 500, { error: String(e.message || e) });
+console.error(e instanceof Error ? e.stack || e.message : e); return json(res, 500, { error: "An internal error occurred" });
     }
   }
 
@@ -117,7 +117,7 @@ const server = http.createServer(async (req, res) => {
 
       return json(res, 200, { answer, citations });
     } catch (e) {
-      return json(res, 500, { error: String(e.message || e) });
+console.error(e instanceof Error ? e.stack || e.message : e); return json(res, 500, { error: "An internal error occurred" });
     }
   }
 
