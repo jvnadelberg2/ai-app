@@ -30,8 +30,8 @@ const server = http.createServer(async (req, res) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       return res.end(html);
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
       res.statusCode = 404;
       return res.end("missing static/index.html");
     }
@@ -44,8 +44,8 @@ const server = http.createServer(async (req, res) => {
       const input = String(body.input || "");
       const out = await complete({ system, user: input });
       return json(res, 200, { output: out });
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -57,8 +57,8 @@ return json(res, 500, { error: "An internal error occurred" });
       if (!texts[0]) return json(res, 400, { error: "text required" });
       const vecs = await embed({ input: texts });
       return json(res, 200, { embeddings: vecs });
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -70,8 +70,8 @@ return json(res, 500, { error: "An internal error occurred" });
       if (!paths.length) return json(res, 400, { error: "paths required" });
       const out = await indexPaths(paths);
       return json(res, 200, out);
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -84,8 +84,8 @@ return json(res, 500, { error: "An internal error occurred" });
       if (!q) return json(res, 400, { error: "q required" });
       const out = await queryRag(q, k);
       return json(res, 200, out);
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
@@ -121,8 +121,8 @@ return json(res, 500, { error: "An internal error occurred" });
       }
 
       return json(res, 200, { answer, citations });
-    } catch (e) {
-  console.error(e instanceof Error ? e.stack || e.message : e);
+    } catch (_e) {
+  console.error(_e instanceof Error ? e.stack || e.message : e);
 return json(res, 500, { error: "An internal error occurred" });
     }
   }
