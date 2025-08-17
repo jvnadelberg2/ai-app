@@ -5,6 +5,14 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "start:3002": "PORT=3002 node server.js"
+    "start:3002": "PORT=3002 node server.js",
+    "lint": "eslint .",
+    "format": "prettier -c .",
+    "md": "markdownlint **/*.md"
+  },
+  "devDependencies": {
+    "eslint": "^9.33.0",
+    "markdownlint-cli": "^0.45.0",
+    "prettier": "^3.6.2"
   }
 }
